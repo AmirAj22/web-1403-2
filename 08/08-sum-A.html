@@ -1,0 +1,40 @@
+<html>
+<head>
+    <title>page 08 a sum</title>
+</head>
+<body>
+    <b>Salam !</b>
+
+    <input class="inputs" type="text" placeholder="First Number">
+    <input class="inputs" type="text" placeholder="Second Number">
+    <input class="btn" type="button" value="Cal" >
+    <script>
+
+let btn =document.querySelector(".btn")
+
+async function getData() {
+    let inputs = document.querySelectorAll(".inputs")
+
+    let firstNumber = inputs[0].value
+    let secondNumber = inputs[1].value
+
+  const url = `http://127.0.0.1/sum/${firstNumber}/${secondNumber}`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      console.log("ERROR.")
+    }
+    const json = await response.json();
+    console.log(json);
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+btn.addEventListener("click" , getData)
+
+
+btn.addEvent
+    </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<html>
+<head>
+    <title>page 08 a sum</title>
+    <style>
+
+        .inputs{
+            font-size: 15px;
+            height: 40px;
+            display: block;
+            margin-bottom:  25px;
+            border-radius: 10px;
+        }
+
+        .btn{
+            width: 90px;
+            height: 40px;
+            background-color: lightblue;
+            cursor: pointer;
+        }
+
+        h1{
+            text-align: center;
+            color: chocolate;
+            font-size: 100px;
+        }
+
+        .wrapper{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background-color: lightcyan;
+            width: fit-content;
+            margin: 100px auto;
+            padding: 10px 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        <input class="inputs" type="text" placeholder="First Number">
+        <input class="inputs" type="text" placeholder="Second Number">
+        <input class="btn" type="button" value="Cal" >
+        <div class="container"></div>
+    </div>
+    <script>
+
+let btn =document.querySelector(".btn")
+let container = document.querySelector(".container")
+
+async function getData() {
+    let inputs = document.querySelectorAll(".inputs")
+
+    let firstNumber = inputs[0].value
+    let secondNumber = inputs[1].value
+
+    let h1Elm = document.createElement("h1")
+
+  const url = `http://127.0.0.1/sum/${firstNumber}/${secondNumber}`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      console.log("ERROR.")
+    }
+    const json = await response.json();
+    console.log(json);
+    h1Elm.innerHTML = json
+    container.appendChild(h1Elm)
+
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+btn.addEventListener("click" , getData)
+
+
+    </script>
+</body>
+</html>
