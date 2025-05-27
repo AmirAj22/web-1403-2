@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+
+.todo-list{
+    width: 500px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    list-style: none;
+    margin-top: 50px;
+}
+
+.todo-list li{
+    font-size: 30px;
+    margin-bottom: 40px;
+}
+
+.todo-list li > input{
+    margin-left: 20px;
+}
+
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 100px;
+    margin-top: 200px;
+}
+
+</style>
+
+<body>
+
+    
+    <ul class="todo-list">
+
+
+    </ul>
+
+    <div class="container">
+        <input class="todo" type="text">
+        <button class="submit">ارسال</button>
+    </div>
+
+
+    <script>
+
+async function getData() {
+    let todoContainer = document.querySelector(".todo-list")
+  const url = "http://127.0.0.1/todo";
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      console.log("ERROR.")
+    }
+    const json = await response.json();
+    json.records.forEach((item) => {
+
+        let liElm = document.createElement("li")
+        let spanElm = document.createElement("span")
+        let inputElm = document.createElement("input")
+
+        inputElm.dataset.ali = item.id
+        inputElm.checked = item.status
+        spanElm.textContent = item.text
+        inputElm.type = "checkbox"
+
+        liElm.appendChild(spanElm)
+        liElm.appendChild(inputElm)
+        todoContainer.appendChild(liElm)
+
+        // todoContainer.insertAdjacentHTML("beforeend" , 
+        // `
+        //     <li class="todo__item">
+        //      <span class="todo__text">${item.text}</span>
+        //         <input type="checkbox" class="todo__check" ${item.status ? "checked" : ""}>
+        //     </li>
+        // `)
+    })
+} catch (error) {
+
+
+    console.error(error.message);
+  }
+}
+
+
+
+getData()
+    </script>
+</body>
+</html>
