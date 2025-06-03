@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+
+    <style>
+
+    </style>
+</head>
+
+<body>
+
+
+    <div class="todo"></div>
+
+    <div class="send-div">
+        <input type="text" id="txt-send" placeholder="Enter Todo">
+        <input type="submit" id="btn-send" value="Save Todo">
+    </div>
+
+</body>
+
+<script>
+
+    const todoDiv = document.querySelector(".todo")
+
+
+    async function getData() {
+        console.log()
+        try {
+            response = await fetch("http://127.0.0.1/todo");
+            if (!response.ok) {
+                console.log("ERROR.")
+            }
+            let json = await response.json();
+
+            json.items.forEach(todo => {
+                const div = document.createElement("div")
+                const inputTag = document.createElement("input")
+                const lableTag = document.createElement("lable")
+                lableTag.setAttribute("for", todo.id)
+                inputTag.name = todo.id
+                inputTag.setAttribute("class", 'checkbox')
+                inputTag.type = "checkbox"
+
+                inputTag.addEventListener("change", (e) => updateStatus(e.target.name))
+
+                inputTag.checked = todo.status
+
+                lableTag.innerHTML = todo.text
+
+                div.appendChild(lableTag)
+                div.appendChild(inputTag)
+
+                todoDiv.appendChild(div)
+
+
+            });
+        } catch (error) {
+            console.error(error.message);
+        }
+
+    }
+
+    const btnSend = document.querySelector("#btn-send")
+
+    async function sendDate() {
+        const txtSend = document.querySelector("#txt-send").value
+
+        const response = await fetch("http://127.0.0.1/todo", {
+            method: "POST",
+            body: JSON.stringify({
+                text: txtSend,
+            })
+        })
+
+        if (!response.ok) {
+            console.log(await response.text())
+        }
+        const div = document.createElement("div")
+        const inputTag = document.createElement("input")
+        const lableTag = document.createElement("lable")
+        lableTag.setAttribute("for", response.id)
+        inputTag.id = response.id
+
+        inputTag.type = "checkbox"
+
+        lableTag.innerHTML = txtSend
+
+        div.appendChild(lableTag)
+        div.appendChild(inputTag)
+        todoDiv.appendChild(div)
+
+
+    }
+
+    async function updateStatus(id) {
+        const response = await fetch("http://127.0.0.1/todo", {
+            method: "PUT",
+            body: JSON.stringify({
+                id: id,
+            })
+        })
+
+        if (!response.ok) {
+            console.log(await response.text())
+        }
+    }
+
+    getData()
+
+    btnSend.addEventListener("click", sendDate)
+</script>
+
+</html>
